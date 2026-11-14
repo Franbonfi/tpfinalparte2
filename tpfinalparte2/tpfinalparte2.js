@@ -12,8 +12,7 @@ function preload() {
   imagenPozo = loadImage("assets/pozo.png");
 
   for (let i = 0; i < 8; i++) {
-    let numero = String(i).padStart(3, "0");
-    framesJugador[i] = loadImage("assets/personaje" + numero + ".png");
+    framesJugador[i] = loadImage("assets/personaje00" + i + ".png");
   }
 }
 
