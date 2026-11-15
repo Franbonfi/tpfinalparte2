@@ -5,6 +5,8 @@ let imagenesVallas = [];
 let imagenPozo;
 
 let correr;
+let lluvia;
+let sirena;
 
 function preload() {
   imagenCalle = loadImage("assets/escenario.png");
@@ -18,6 +20,7 @@ function preload() {
   }
   
   correr = loadSound("assets/correr.mp3");
+  sirena = loadSound("assets/sirena.mp3");
   
 }
 
@@ -30,14 +33,27 @@ function draw() {
   juego.actualizar();
   juego.dibujar();
   
-  if (juego.estado === "jugando") { 
-    if (correr && correr.isLoaded() && !correr.isPlaying()) {
-      correr.setVolume(1.5);
-      correr.loop(); 
+  //jugador corre
+  if (juego.estado === "jugando") {
+    if (correr.isLoaded() && !correr.isPlaying()) {
+      correr.setVolume(1);
+      correr.loop();
     }
   } else {
-    if (correr && correr.isPlaying()) {
-      correr.stop(); 
+    if (correr.isPlaying()) {
+      correr.stop();
+    }
+  }
+
+  //sirenas
+  if (juego.estado === "jugando") {
+    if (sirena.isLoaded() && !sirena.isPlaying()) {
+      sirena.setVolume(0.2);
+      sirena.loop();
+    }
+  } else {
+    if (sirena.isPlaying()) {
+      sirena.stop();
     }
   }
   
@@ -47,6 +63,7 @@ function keyPressed() {
   // Comenzar desde la pantalla inicial
   if (juego.estado === "inicio" && keyCode === ENTER) {
     juego.comenzar();
+    userStartAudio();
   }
   // Reiniciar después de ganar o perder
   if (
@@ -185,12 +202,89 @@ class Interfaz {
       textSize(42);
 
       if (juego.estado === "victoria") {
-        text("¡GANASTE!", width / 2, height / 2 - 30);
+        //text("¡GANASTE!", width / 2, height / 2 - 30);
+        
+        push();
+    fill(0, 0, 0, 200);
+    stroke(100);
+    strokeWeight(1);
+    rect(220, 30, 360, 310, 8);
+
+    textAlign(CENTER, CENTER);
+    
+    let tinteRojo = map(sin(frameCount * 0.05), -1, 1, 120, 255);
+    fill(tinteRojo, 40, 40);
+    textSize(20);
+    textStyle(BOLD);
+    
+    text("¡GANASTE!", width / 2, height / 2 - 30);
+    
+    text("— CRÉDITOS —", width / 2, 60);
+
+    fill(230);
+    textSize(14);
+    textStyle(BOLD);
+    text("HISTORIA:", width / 2, 105);
+    fill(180);
+    textSize(13);
+    textStyle(NORMAL);
+    text("El misterio del almacen 10", width / 2, 125);
+
+    fill(230);
+    textSize(14);
+    textStyle(BOLD);
+    text("AUTOR:", width / 2, 165);
+    fill(180);
+    textSize(13);
+    textStyle(NORMAL);
+    text("Juan Garganta", width / 2, 185);
+    text("Francesca Bonfiglio Ros", width / 2, 205);
+    pop();
+        
       } else {
-        text("PERDISTE :(", width / 2, height / 2 - 30);
+        //text("PERDISTE :(", width / 2, height / 2 - 30);
+        
+        push();
+    fill(0, 0, 0, 200);
+    stroke(100);
+    strokeWeight(1);
+    rect(220, 30, 360, 310, 8);
+
+    textAlign(CENTER, CENTER);
+    
+    fill(180);
+    textSize(23);
+    text("PERDISTE :(", width / 2, 60);
+    
+    let tinteRojo = map(sin(frameCount * 0.05), -1, 1, 120, 255);
+    fill(tinteRojo, 40, 40);
+    textSize(20);
+    textStyle(BOLD);
+    
+    text("— CRÉDITOS —", width / 2, 100);
+
+    fill(230);
+    textSize(14);
+    textStyle(BOLD);
+    text("HISTORIA:", width / 2, 145);
+    fill(180);
+    textSize(13);
+    textStyle(NORMAL);
+    text("El misterio del almacen 10", width / 2, 165);
+
+    fill(230);
+    textSize(14);
+    textStyle(BOLD);
+    text("AUTOR:", width / 2, 205);
+    fill(180);
+    textSize(13);
+    textStyle(NORMAL);
+    text("Juan Garganta", width / 2, 225);
+    text("Francesca Bonfiglio Ros", width / 2, 245);
+    pop();
       }
       textSize(20);
-      text("R para reiniciar", width / 2, height / 2 + 25);
+      text("R para reiniciar", width / 2, 285);
     }
   }
 
