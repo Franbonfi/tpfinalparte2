@@ -4,6 +4,8 @@ let framesJugador = [];
 let imagenesVallas = [];
 let imagenPozo;
 
+let correr;
+
 function preload() {
   imagenCalle = loadImage("assets/escenario.png");
   imagenesVallas[0] = loadImage("assets/valla1.png");
@@ -14,6 +16,9 @@ function preload() {
   for (let i = 0; i < 8; i++) {
     framesJugador[i] = loadImage("assets/personaje00" + i + ".png");
   }
+  
+  correr = loadSound("assets/correr.mp3");
+  
 }
 
 function setup() {
@@ -24,12 +29,34 @@ function setup() {
 function draw() {
   juego.actualizar();
   juego.dibujar();
+  
+  if (juego.estado !== "jugando") { 
+    if (correr && correr.isPlaying()) {
+      correr.stop(); 
+    }
+  }
+  
+  // Reproducir el sonido mientras se juega
+  if (juego.estado === "jugando") {
+    if (correr && correr.isLoaded() && !correr.isPlaying()) {
+      correr.setVolume(1);
+      correr.loop();
+    }
+  }
+  
 }
 
 function keyPressed() {
   // Comenzar desde la pantalla inicial
   if (juego.estado === "inicio" && keyCode === ENTER) {
     juego.comenzar();
+    
+    userStartAudio(); //agregue
+    
+    if (correr && correr.isLoaded() && !correr.isPlaying()) {
+      correr.setVolume(1);
+      correr.loop();
+    }
   }
   // Reiniciar después de ganar o perder
   if (
@@ -37,6 +64,9 @@ function keyPressed() {
     (key === "r" || key === "R")
   ) {
     juego.reiniciar();
+    
+    userStartAudio(); //agregue
+    
   }
 
   if (keyCode === LEFT_ARROW || keyCode === RIGHT_ARROW) {
