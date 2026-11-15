@@ -30,17 +30,14 @@ function draw() {
   juego.actualizar();
   juego.dibujar();
   
-  if (juego.estado !== "jugando") { 
+  if (juego.estado === "jugando") { 
+    if (correr && correr.isLoaded() && !correr.isPlaying()) {
+      correr.setVolume(1.5);
+      correr.loop(); 
+    }
+  } else {
     if (correr && correr.isPlaying()) {
       correr.stop(); 
-    }
-  }
-  
-  // Reproducir el sonido mientras se juega
-  if (juego.estado === "jugando") {
-    if (correr && correr.isLoaded() && !correr.isPlaying()) {
-      correr.setVolume(1);
-      correr.loop();
     }
   }
   
@@ -50,13 +47,6 @@ function keyPressed() {
   // Comenzar desde la pantalla inicial
   if (juego.estado === "inicio" && keyCode === ENTER) {
     juego.comenzar();
-    
-    userStartAudio(); //agregue
-    
-    if (correr && correr.isLoaded() && !correr.isPlaying()) {
-      correr.setVolume(1);
-      correr.loop();
-    }
   }
   // Reiniciar después de ganar o perder
   if (
@@ -64,9 +54,6 @@ function keyPressed() {
     (key === "r" || key === "R")
   ) {
     juego.reiniciar();
-    
-    userStartAudio(); //agregue
-    
   }
 
   if (keyCode === LEFT_ARROW || keyCode === RIGHT_ARROW) {
